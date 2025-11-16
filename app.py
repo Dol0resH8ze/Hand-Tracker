@@ -1,0 +1,1 @@
+from src.handtrackingmin import *
