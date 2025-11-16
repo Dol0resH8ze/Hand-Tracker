@@ -25,6 +25,6 @@ This project is ideal for:
 
 
 
-**License
+##License
 
 This project is released under the MIT License.
