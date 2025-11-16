@@ -70,6 +70,14 @@ def main():
                 # draw landmarks
                 mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
 
+                draw = True 
+
+                if draw:
+                    fingertip_ids = [4, 8, 12, 16, 20]
+                    for tip_id in fingertip_ids:
+                        cx , cy = int(handLms.landmark[tip_id].x * img.shape[1]) , int(handLms.landmark[tip_id].y * img.shape[0])
+                        cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
+                        
                 # show number near the hand
                 h, w, _ = img.shape
                 cx, cy = int(handLms.landmark[0].x * w), int(handLms.landmark[0].y * h)
