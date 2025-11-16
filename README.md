@@ -22,19 +22,9 @@ This project is ideal for:
 ---
 
 
-## Project Structure
-your-project/
-├── app.py                 # Entry point of the project
-├── requirements.txt       # Python dependencies
-├── .gitignore             # Git ignore rules
-├── README.md              # This file
-└── src/
-    └── handtrackingmin.py   # Hand tracking code
-
----
 
 
 
-License
+**License
 
 This project is released under the MIT License.
