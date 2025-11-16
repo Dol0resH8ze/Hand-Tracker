@@ -5,13 +5,13 @@ import time
 def fingers_up(hand_landmarks, handedness="Right"):
     fingers = []
 
-    # Thumb
+    # thumb
     if handedness == "Right":
         fingers.append(1 if hand_landmarks.landmark[4].x < hand_landmarks.landmark[3].x else 0)
     else:  # Left hand
         fingers.append(1 if hand_landmarks.landmark[4].x > hand_landmarks.landmark[3].x else 0)
 
-    # Other 4 fingers
+    # other 4 fingers
     for tip_id, pip_id in zip([8, 12, 16, 20], [6, 10, 14, 18]):
         fingers.append(1 if hand_landmarks.landmark[tip_id].y < hand_landmarks.landmark[pip_id].y else 0)
 
@@ -54,19 +54,35 @@ def main():
         fps = 1 / (cTime - pTime)
         pTime = cTime
 
+        hand_numbers = []
+
         if results.multi_hand_landmarks:
+            num_hands = len(results.multi_hand_landmarks)
+
             for idx, handLms in enumerate(results.multi_hand_landmarks):
                 handedness_label = results.multi_handedness[idx].classification[0].label
                 fingers = fingers_up(handLms, handedness_label)
                 number = detect_numbers(fingers)
 
+                # store number as int (default 0 if empty)
+                hand_numbers.append(int(number) if number != "" else 0)
+
+                # draw landmarks
                 mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
 
+                # show number near the hand
                 h, w, _ = img.shape
                 cx, cy = int(handLms.landmark[0].x * w), int(handLms.landmark[0].y * h)
                 if number != "":
-                    cv2.putText(img, f'{number}', (500, 150 ), cv2.FONT_HERSHEY_SIMPLEX, 5, (255, 255, 255), 3)
+                    cv2.putText(img, f'{number}', (cx - 90, cy - 30), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 3)
 
+            # if 2 hands, show sum at top
+            if num_hands == 2:
+                total = sum(hand_numbers)
+                cv2.putText(img, f'Sum: {total}', (img.shape[1]//2 - 50, 50),
+                            cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 3)
+
+        # show FPS
         cv2.putText(img, f'FPS: {int(fps)}', (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 255), 3)
         cv2.imshow("Hand Tracking Numbers", img)
 
@@ -79,3 +95,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
