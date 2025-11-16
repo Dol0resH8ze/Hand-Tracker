@@ -8,6 +8,7 @@ Currently, it:
 
 - Detects one or more hands in real-time
 - Draws hand landmarks (21 key points per hand)
+- Translates hand gestures to numbers or letters
 - Shows FPS on screen
 
 Future updates can include **recognizing American Sign Language (ASL) letters** from hand gestures.
